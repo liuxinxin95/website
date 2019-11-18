@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cpy.website.center.dao.CpyProjectDao">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.cpy.website.center.entity.CpyProject" id="cpyProjectMap">
+        <result property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="keyword" column="keyword"/>
+        <result property="digest" column="digest"/>
+        <result property="content" column="content"/>
+        <result property="pics" column="pics"/>
+        <result property="succeedUrl" column="succeed_url"/>
+        <result property="isOpen" column="is_open"/>
+        <result property="pwds" column="pwds"/>
+        <result property="pc" column="pc"/>
+        <result property="iphone" column="iphone"/>
+        <result property="ipad" column="ipad"/>
+        <result property="pcUrl" column="pc_url"/>
+        <result property="iphoneUrl" column="iphone_url"/>
+        <result property="ipadUrl" column="ipad_url"/>
+        <result property="status" column="status"/>
+        <result property="categoryIds" column="category_ids"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <select id="queryObject" resultMap="cpyProjectMap">
+        select *
+        from cpy_project where id = #{value}
+    </select>
+
+    <select id="queryList" resultMap="cpyProjectMap">
+        select * from cpy_project
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryListByParam" resultMap="cpyProjectMap">
+        select * from cpy_project
+        where 1=1
+        <if test="status != null ">
+            and status = #{status}
+        </if>
+        <if test="categoryId != null ">
+            and category_ids like CONCAT('%', #{categoryId}, '%')
+        </if>
+        <if test="title != null and title !=''">
+            and title like CONCAT('%', #{title}, '%')
+        </if>
+
+    </select>
+
+    <insert id="save" parameterType="com.cpy.website.center.entity.CpyProject" useGeneratedKeys="true" keyProperty="id">
+        insert into cpy_project(title,keyword,digest,content,pics,succeed_url,is_open,pwds,pc,iphone,ipad,pc_url,iphone_url,
+        ipad_url,status,category_ids,create_time,update_time
+        ) values (
+        #{title},#{keyword},#{digest},#{content},#{pics},#{succeedUrl},#{isOpen},#{pwds},#{pc},
+        #{iphone},#{ipad},#{pcUrl},#{iphoneUrl},#{ipadUrl},#{status},#{categoryIds},#{createTime},#{updateTime}
+        )
+    </insert>
+
+    <update id="update" parameterType="com.cpy.website.center.entity.CpyProject">
+        update cpy_project
+        <set>
+            <if test="title != null">
+                `title` = #{title}
+                ,
+            </if>
+            <if test="keyword != null">
+                `keyword` = #{keyword}
+                ,
+            </if>
+            <if test="digest != null">
+                `digest` = #{digest}
+                ,
+            </if>
+            <if test="content != null">
+                `content` = #{content}
+                ,
+            </if>
+            <if test="pics != null">
+                `pics` = #{pics}
+                ,
+            </if>
+            <if test="succeedUrl != null">
+                `succeed_url` = #{succeedUrl}
+                ,
+            </if>
+            <if test="isOpen != null">
+                `is_open` = #{isOpen}
+                ,
+            </if>
+            <if test="pwds != null">
+                `pwds` = #{pwds}
+                ,
+            </if>
+            <if test="pc != null">
+                `pc` = #{pc}
+                ,
+            </if>
+            <if test="iphone != null">
+                `iphone` = #{iphone}
+                ,
+            </if>
+            <if test="ipad != null">
+                `ipad` = #{ipad}
+                ,
+            </if>
+            <if test="pcUrl != null">
+                `pc_url` = #{pcUrl}
+                ,
+            </if>
+            <if test="iphoneUrl != null">
+                `iphone_url` = #{iphoneUrl}
+                ,
+            </if>
+            <if test="ipadUrl != null">
+                `ipad_url` = #{ipadUrl}
+                ,
+            </if>
+            <if test="status != null">
+                `status` = #{status}
+                ,
+            </if>
+            <if test="createTime != null">
+                `create_time` = #{createTime}
+                ,
+            </if>
+            <if test="updateTime != null">
+                `update_time` = #{updateTime}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+        delete from cpy_project where id = #{value}
+    </delete>
+
+    <delete id="deleteBatch">
+        delete from cpy_project where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

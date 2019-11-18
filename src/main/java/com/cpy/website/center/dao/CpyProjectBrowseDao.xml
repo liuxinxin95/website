@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cpy.website.center.dao.CpyProjectBrowseDao">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.cpy.website.center.entity.CpyProjectBrowse" id="cpyProjectBrowseMap">
+        <result property="projectId" column="project_id"/>
+        <result property="browseNum" column="browse_num"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <select id="queryObject" resultMap="cpyProjectBrowseMap">
+        select *
+        from cpy_project_browse where project_id = #{value}
+    </select>
+
+    <select id="queryList" resultMap="cpyProjectBrowseMap">
+        select * from cpy_project_browse
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by project_id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <insert id="save" parameterType="com.cpy.website.center.entity.CpyProjectBrowse">
+        insert into cpy_project_browse (project_id,browse_num,create_time,update_time) VALUES
+        (#{projectId},#{browseNum},#{createTime},#{updateTime})
+    </insert>
+
+    <update id="update" parameterType="com.cpy.website.center.entity.CpyProjectBrowse">
+        update cpy_project_browse
+        <set>
+            <if test="browseNum != null">
+                `browse_num` = #{browseNum}
+                ,
+            </if>
+            <if test="createTime != null">
+                `create_time` = #{createTime}
+                ,
+            </if>
+            <if test="updateTime != null">
+                `update_time` = #{updateTime}
+            </if>
+        </set>
+        where project_id = #{projectId}
+    </update>
+
+    <delete id="delete">
+        delete from cpy_project_browse where project_id = #{value}
+    </delete>
+
+    <delete id="deleteBatch">
+        delete from cpy_project_browse where project_id in
+        <foreach item="projectId" collection="array" open="(" separator="," close=")">
+            #{projectId}
+        </foreach>
+    </delete>
+
+</mapper>

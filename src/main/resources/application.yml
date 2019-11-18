@@ -1,0 +1,46 @@
+
+# Tomcat
+server:
+  tomcat:
+    uri-encoding: UTF-8
+    max-threads: 1000
+    min-spare-threads: 30
+  port: 8055
+  connection-timeout: 5000
+  servlet:
+    context-path: /website
+# mysql
+spring:
+  application:
+    name: website
+  # 环境 dev|test|pro
+  profiles:
+    active: dev
+  #    datasource:
+  #        type: com.alibaba.druid.pool.DruidDataSource
+  #        driverClassName: com.mysql.jdbc.Driver
+  # jackson时间格式化
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+  # 指定静态资源的路径
+
+
+
+# Mybatis配置
+mybatis:
+  mapperLocations: classpath:com/website/center/dao/*.xml
+  #    configLocation: classpath:mybatis.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+#mybatis分页
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+
+project:
+  package:
+    path: ${user.home}/51html/project/
